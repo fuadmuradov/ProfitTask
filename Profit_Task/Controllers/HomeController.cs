@@ -43,9 +43,10 @@ namespace Profit_Task.Controllers
            
         }
 
-        public async Task<IActionResult> Index(int page =1 )
+        public async Task<IActionResult> Index(int page =1, string search="")
         {
-            var ListTodo = await todoService.GetAll(page);
+            ViewBag.Search = search;
+            var ListTodo = await todoService.GetAll(page, search);
             ViewBag.CurrentPage = page;
             ViewBag.TotalPage = ListTodo.TotalPage;
             List<Todo> todos = ListTodo.Items;
@@ -56,8 +57,8 @@ namespace Profit_Task.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(string search)
         {
-            List<Todo> todos = await todoService.GetSearch(search);
-            return View(todos);
+           // List<Todo> todos = await todoService.GetSearch(search);
+            return LocalRedirect("~/Home/index/?page=1&search=" + search);
         }
         public IActionResult Privacy()
         {

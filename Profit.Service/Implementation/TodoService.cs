@@ -29,20 +29,24 @@ namespace Profit.Service.Implementation
 
         }
 
-        public async Task<PaginatedListDto<Todo>> GetAll(int PageIndex)
+        public async Task<PaginatedListDto<Todo>> GetAll(int PageIndex, string search)
         {
-
+            IQueryable<Todo> query;
             int PageSize = 10;
-            var query = todoRepository.GetAll(x=>x.Id>0);
+            if (search != "")
+            {
+                query = todoRepository.GetAll(x => x.Id.ToString().Contains(search) || x.UserId.ToString().Contains(search) || x.Title.Contains(search));
+            }
+            else
+            {
+                query = todoRepository.GetAll(x => x.Id > 0);
+            }
+             
             var items = query.Skip((PageIndex - 1) * PageSize).Take(PageSize).ToList();
             var listItem = new PaginatedListDto<Todo>(items, query.Count(), PageSize, PageIndex);
             return listItem;
         }
 
-        public async Task<List<Todo>> GetSearch(string searchStr)
-        {
-            var query = todoRepository.GetAll(x=>x.Id.ToString().Contains(searchStr) || x.UserId.ToString().Contains(searchStr) || x.Title.Contains(searchStr));
-            return query.ToList();
-        }
+     
     }
 }
