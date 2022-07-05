@@ -1,0 +1,54 @@
+﻿@model List<Todo>
+
+<form method="post">
+    <div class="mb-3 mt-3">
+        <label for="search" class="form-label">Search:</label>
+        <input type="text" class="form-control" id="searchId" placeholder="Search" name="search">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+<div class="tableDiv">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">UserId</th>
+                <th scope="col">ID</th>
+                <th scope="col">Title</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var todo in Model)
+            {
+                <tr>
+                    <td>@todo.UserId</td>
+                    <td>@todo.Id</td>
+                    <td>@todo.Title</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+
+<div class="container mt-7">
+    <div class="row justify-content-center">
+        <nav aria-label="...">
+            <ul class="pagination mt-5" style="justify-content:center">
+                <li class="page-item @(ViewBag.CurrentPage==1 ? "disabled" : "")">
+                    <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage-1)">Previous</a>
+                </li>
+                @for (int i = 1; i <= ViewBag.TotalPage; i++)
+                {
+                    <li class="page-item @(ViewBag.CurrentPage==i ? "active":"")" style="@(ViewBag .CurrentPage==i ? "pointer-events:none":"")" aria-current="page">
+                        <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-page="@i">@i</a>
+                    </li>
+                }
+                <li class="page-item @(ViewBag.CurrentPage==ViewBag.TotalPage ? "disabled" : "")">
+                    <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage+1)">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
